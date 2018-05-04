@@ -11,7 +11,7 @@ import os.path
 sys.path.append(os.path.abspath(os.path.join(
     os.path.dirname(__file__), os.path.pardir)))
 
-import network
+import tracker.network as network
 
 from re3_utils.util import bb_util
 from re3_utils.util import im_util
@@ -137,6 +137,8 @@ class Re3Tracker(object):
             self.time += (end_time - start_time - image_read_time)
         if SPEED_OUTPUT and self.total_forward_count % 100 == 0:
             print('Current tracking speed:   %.3f FPS' % (1 / (end_time - start_time - image_read_time)))
+            if image_read_time == 0:
+                image_read_time = 0.1
             print('Current image read speed: %.3f FPS' % (1 / (image_read_time)))
             print('Mean tracking speed:      %.3f FPS\n' % (self.total_forward_count / max(.00001, self.time)))
         return outputBox
@@ -237,6 +239,8 @@ class Re3Tracker(object):
         if SPEED_OUTPUT and self.total_forward_count % 100 == 0:
             print('Current tracking speed per object: %.3f FPS' % (len(unique_ids) / (end_time - start_time - image_read_time)))
             print('Current tracking speed per frame:  %.3f FPS' % (1 / (end_time - start_time - image_read_time)))
+            if image_read_time == 0:
+                image_read_time = 0.1
             print('Current image read speed:          %.3f FPS' % (1 / (image_read_time)))
             print('Mean tracking speed per object:    %.3f FPS\n' % (self.total_forward_count / max(.00001, self.time)))
         return outputBoxes
